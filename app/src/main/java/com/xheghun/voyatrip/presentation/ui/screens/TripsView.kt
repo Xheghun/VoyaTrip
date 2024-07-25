@@ -44,15 +44,18 @@ import com.xheghun.voyatrip.presentation.ui.custom_view.TripListItem
 import com.xheghun.voyatrip.presentation.ui.custom_view.VoyaAppBar
 import com.xheghun.voyatrip.presentation.ui.theme.Satoshi
 import com.xheghun.voyatrip.presentation.ui.utils.Spacer
+import com.xheghun.voyatrip.presentation.viewmodel.DatePickerState
+import com.xheghun.voyatrip.presentation.viewmodel.TripViewModel
 import com.xheghun.voyatrip.ui.theme.bluePrimary
 import com.xheghun.voyatrip.ui.theme.darkGray
 import com.xheghun.voyatrip.ui.theme.lightGray
 import com.xheghun.voyatrip.ui.theme.skyBlue
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TripsView() {
-    val tripViewModel = viewModel<TripViewModel>()
+    val tripViewModel = koinViewModel<TripViewModel>()
 
     Column {
         VoyaAppBar(title = "Plan a Trip")

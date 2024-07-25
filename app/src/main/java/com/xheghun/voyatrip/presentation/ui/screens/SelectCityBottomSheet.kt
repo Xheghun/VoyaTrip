@@ -25,6 +25,7 @@ import com.xheghun.voyatrip.data.models.dummyLocations
 import com.xheghun.voyatrip.presentation.ui.custom_view.LocationListItem
 import com.xheghun.voyatrip.presentation.ui.custom_view.VoyaAppBar
 import com.xheghun.voyatrip.presentation.ui.utils.Spacer
+import com.xheghun.voyatrip.presentation.viewmodel.TripViewModel
 import com.xheghun.voyatrip.ui.theme.darkGray
 import kotlinx.coroutines.launch
 

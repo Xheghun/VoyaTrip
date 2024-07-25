@@ -44,6 +44,8 @@ import com.kizitonwose.calendar.core.daysOfWeek
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.xheghun.voyatrip.presentation.ui.custom_view.VoyaAppBar
 import com.xheghun.voyatrip.presentation.ui.utils.Spacer
+import com.xheghun.voyatrip.presentation.viewmodel.DatePickerState
+import com.xheghun.voyatrip.presentation.viewmodel.TripViewModel
 import com.xheghun.voyatrip.ui.theme.bluePrimary
 import com.xheghun.voyatrip.ui.theme.colorCalenderDayItem
 import com.xheghun.voyatrip.ui.theme.iconColor

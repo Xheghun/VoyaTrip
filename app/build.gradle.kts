@@ -52,9 +52,20 @@ android {
 }
 
 dependencies {
+    val koin_version = "3.6.0-wasm-alpha2"
 
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
     implementation("com.kizitonwose.calendar:compose:2.5.2")
+    implementation("com.squareup.retrofit2:converter-gson:2.6.2")
+    implementation("com.squareup.retrofit2:retrofit:2.6.2")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.2.1")
+
+    // Koin for Android
+    implementation("io.insert-koin:koin-androidx-compose:$koin_version")
+    implementation("io.insert-koin:koin-core")
+    implementation("io.insert-koin:koin-android:$koin_version")
+
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

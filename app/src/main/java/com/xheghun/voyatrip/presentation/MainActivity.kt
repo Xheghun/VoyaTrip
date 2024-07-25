@@ -17,41 +17,40 @@ import com.xheghun.voyatrip.presentation.Route
 import com.xheghun.voyatrip.presentation.ui.screens.CreateTrip
 import com.xheghun.voyatrip.presentation.ui.screens.TripsView
 import com.xheghun.voyatrip.ui.theme.VoyaTripTheme
+import org.koin.androidx.compose.KoinAndroidContext
+import org.koin.core.annotation.KoinExperimentalAPI
 
 class MainActivity : ComponentActivity() {
+    @OptIn(KoinExperimentalAPI::class)
     override fun onCreate(savedInstanceState: Bundle?) {
+
+
+
         super.onCreate(savedInstanceState)
 
         enableEdgeToEdge()
         setContent {
             val navController = rememberNavController()
 
-            VoyaTripTheme(darkTheme = false) {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    NavHost(
-                        navController = navController,
-                        startDestination = Route.TripsView.name,
-                        modifier = Modifier.padding(innerPadding),
-                    ) {
-                        composable(Route.TripsView.name) {
-                            TripsView()
-                        }
+            KoinAndroidContext {
+                VoyaTripTheme(darkTheme = false) {
+                    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                        NavHost(
+                            navController = navController,
+                            startDestination = Route.TripsView.name,
+                            modifier = Modifier.padding(innerPadding),
+                        ) {
+                            composable(Route.TripsView.name) {
+                                TripsView()
+                            }
 
-                        composable(Route.CreateTrip.name) {
-                            CreateTrip()
+                            composable(Route.CreateTrip.name) {
+                                CreateTrip()
+                            }
                         }
                     }
                 }
             }
         }
-    }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun VoyaPreview() {
-    VoyaTripTheme {
-        TripsView()
     }
 }

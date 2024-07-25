@@ -1,7 +1,9 @@
-package com.xheghun.voyatrip.presentation.ui.screens
+package com.xheghun.voyatrip.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.xheghun.voyatrip.data.models.Location
+import com.xheghun.voyatrip.data.models.Trip
+import com.xheghun.voyatrip.domain.repo.TripsRepo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -12,7 +14,7 @@ enum class DatePickerState {
     START_DATE, END_DATE
 }
 
-class TripViewModel : ViewModel() {
+class TripViewModel(tripsRepo: TripsRepo) : TripsPresenter, ViewModel() {
     private val _options = MutableStateFlow(listOf("Planned Trips", "Completed Trips"))
     val options = _options.asStateFlow()
 
@@ -119,6 +121,12 @@ class TripViewModel : ViewModel() {
         } else {
             selectedEndDate
         }
+    }
+
+    override fun createTrip(trip: Trip) {
+    }
+
+    override fun getTrips() {
     }
 
 
