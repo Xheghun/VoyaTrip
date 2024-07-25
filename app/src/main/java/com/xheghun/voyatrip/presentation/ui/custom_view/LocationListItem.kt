@@ -1,6 +1,7 @@
 package com.xheghun.voyatrip.presentation.ui.custom_view
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
@@ -26,8 +27,13 @@ import com.xheghun.voyatrip.presentation.ui.utils.Spacer
 import com.xheghun.voyatrip.ui.theme.darkGray
 
 @Composable
-fun LocationListItem(location: Location) {
-    Row(Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
+fun LocationListItem(location: Location, onTap: () -> Unit = {}) {
+    Row(
+        Modifier
+            .clickable { onTap.invoke() }
+            .padding(12.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
         Icon(
             Icons.Default.LocationOn,
             contentDescription = "item icon",
@@ -51,7 +57,9 @@ fun LocationListItem(location: Location) {
                 painterResource(R.drawable.flag_ng),
                 contentDescription = "",
                 contentScale = ContentScale.Crop,
-                modifier = Modifier.width(22.dp).height(16.dp)
+                modifier = Modifier
+                    .width(22.dp)
+                    .height(16.dp)
             )
             Spacer(height = 6f)
             Text(location.code.uppercase(), color = darkGray)

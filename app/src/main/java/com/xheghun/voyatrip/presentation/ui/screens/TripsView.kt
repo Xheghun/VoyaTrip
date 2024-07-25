@@ -16,15 +16,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material.icons.outlined.LocationOn
-import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -32,16 +29,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -70,7 +62,7 @@ import kotlinx.coroutines.launch
 fun TripsView() {
     val tripViewModel = viewModel<TripViewModel>()
 
-    Column() {
+    Column {
         VoyaAppBar(title = "Plan a Trip")
 
         //SECTION 1
@@ -143,10 +135,11 @@ fun TripsView() {
                     Item(
                         icon = Icons.Outlined.LocationOn,
                         title = "Where to? ",
-                        subTitle = "Select City",
+                        subTitle = tripViewModel.selectedCity.collectAsState().value?.city
+                            ?: "Select City",
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        tripViewModel.toggleIsSelectCityExpanded(true)
+                        tripViewModel.updateIsSelectCityExpanded(true)
                     }
                     Spacer(height = 6f)
 
@@ -154,16 +147,23 @@ fun TripsView() {
                         Item(
                             icon = Icons.Outlined.DateRange,
                             title = "Start Date",
-                            subTitle = "Enter Date",
+                            subTitle = tripViewModel.selectedStartDate.collectAsState().value,
                             modifier = Modifier.weight(1f)
-                        )
+                        ) {
+
+                            tripViewModel.updateDatePickerState(DatePickerState.START_DATE)
+                            tripViewModel.updateIsChooseDateExpanded(true)
+                        }
                         Spacer(width = 4f)
                         Item(
                             icon = Icons.Outlined.DateRange,
                             title = "Start Date",
-                            subTitle = "Enter Date",
+                            subTitle = tripViewModel.selectedEndDate.collectAsState().value,
                             modifier = Modifier.weight(1f)
-                        )
+                        ) {
+                            tripViewModel.updateDatePickerState(DatePickerState.END_DATE)
+                            tripViewModel.updateIsChooseDateExpanded(true)
+                        }
                     }
 
                     Button(
@@ -253,7 +253,6 @@ fun TripsView() {
                         }
                     }
                 }
-
             }
 
             Box(modifier = Modifier.height(10.dp))
@@ -265,58 +264,7 @@ fun TripsView() {
             }
         }
 
-
         SelectCityBottomSheet(tripViewModel)
-    }
-}
-
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun SelectCityBottomSheet(tripViewModel: TripViewModel) {
-    val bottomSheetState = rememberModalBottomSheetState()
-    val coroutineScope = rememberCoroutineScope()
-
-    if (tripViewModel.isSelectCityExpanded.collectAsState().value) {
-        ModalBottomSheet(
-            shape = RoundedCornerShape(0.dp),
-            sheetState = bottomSheetState,
-            content = {
-                Column(
-                    Modifier
-                        .background(Color.White)
-                        .fillMaxSize()
-                ) {
-                    VoyaAppBar(title = "Where", Icons.Default.Close) {
-                        coroutineScope.launch {
-                            bottomSheetState.hide()
-                            tripViewModel.toggleIsSelectCityExpanded(false)
-                        }
-                    }
-                    Column(Modifier.padding(12.dp)) {
-                        Text("Please select a city", color = darkGray)
-                        Spacer(height = 10f)
-
-                        OutlinedTextField(
-                            "",
-                            onValueChange = {},
-                            modifier = Modifier.fillMaxWidth()
-                        )
-
-                        Spacer(height = 10f)
-
-                        LazyColumn {
-                            items(dummyLocations(12)) { location ->
-                                LocationListItem(location)
-                            }
-                        }
-                    }
-                }
-            },
-            onDismissRequest = {
-                tripViewModel.toggleIsSelectCityExpanded(false)
-            },
-            dragHandle = {}
-        )
+        ChooseDateBottomSheet(tripViewModel)
     }
 }
