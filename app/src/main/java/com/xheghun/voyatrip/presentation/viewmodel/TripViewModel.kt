@@ -1,12 +1,15 @@
 package com.xheghun.voyatrip.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.xheghun.voyatrip.data.models.Location
 import com.xheghun.voyatrip.data.models.Trip
 import com.xheghun.voyatrip.domain.repo.TripsRepo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 
@@ -14,12 +17,20 @@ enum class DatePickerState {
     START_DATE, END_DATE
 }
 
-class TripViewModel(tripsRepo: TripsRepo) : TripsPresenter, ViewModel() {
+class TripViewModel(private val tripsRepo: TripsRepo) : TripsPresenter, ViewModel() {
+
+    init {
+        getTrips()
+    }
+
     private val _options = MutableStateFlow(listOf("Planned Trips", "Completed Trips"))
     val options = _options.asStateFlow()
 
     private val _travelStyleOptions = MutableStateFlow(listOf("Solo", "Couple", "Family", "Group"))
     val travelStyleOptions = _travelStyleOptions.asStateFlow()
+
+    private val _trips = MutableStateFlow<List<Trip>>(listOf())
+    val trips = _trips.asStateFlow()
 
     private val _isOptionsExpanded = MutableStateFlow(false)
     val isOptionsExpanded = _isOptionsExpanded.asStateFlow()
@@ -61,6 +72,9 @@ class TripViewModel(tripsRepo: TripsRepo) : TripsPresenter, ViewModel() {
 
     private val _tripDescription = MutableStateFlow("")
     val tripDescription = _tripDescription.asStateFlow()
+
+    private val _isBusy = MutableStateFlow(false)
+    val isBusy = _isBusy.asStateFlow()
 
     fun updateTripName(value: String) {
         _tripName.value = value
@@ -123,11 +137,40 @@ class TripViewModel(tripsRepo: TripsRepo) : TripsPresenter, ViewModel() {
         }
     }
 
-    override fun createTrip(trip: Trip) {
+    override fun createTrip() {
+        _isBusy.value = true
+        val trip = Trip(
+            tripName = tripName.value,
+            description = tripDescription.value,
+            travelStyle = selectedTravelStyle.value,
+            startDate = selectedStartDate.value,
+            endDate = selectedEndDate.value,
+            duration = "",
+            location = selectedCity.value!!
+        )
+
+        viewModelScope.launch {
+            val result = runCatching { tripsRepo.createTrip(trip) }
+            result
+                .onSuccess {
+                    _isBusy.value = false
+                    Log.d("TripViewModel", "Trip created successfully")
+                }
+                .onFailure {
+                    _isBusy.value = false
+                    Log.e("TripViewModel", "Error creating trip", it)
+                }
+        }
     }
 
     override fun getTrips() {
+        viewModelScope.launch {
+            val result = runCatching { tripsRepo.getTrips() }
+            result.onSuccess {
+                _trips.value = it
+            }.onFailure {
+                Log.e("TripViewModel", "Error getting trips", it)
+            }
+        }
     }
-
-
 }

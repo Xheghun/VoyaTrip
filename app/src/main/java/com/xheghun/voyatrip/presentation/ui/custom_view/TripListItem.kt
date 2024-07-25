@@ -27,6 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.xheghun.voyatrip.R
 import com.xheghun.voyatrip.data.models.Trip
+import com.xheghun.voyatrip.data.models.dummyLocations
 import com.xheghun.voyatrip.ui.theme.VoyaTripTheme
 import com.xheghun.voyatrip.ui.theme.bluePrimary
 import com.xheghun.voyatrip.ui.theme.lightGray
@@ -55,13 +56,13 @@ fun TripListItem(trip: Trip) {
 
                 )
                 Text(
-                    text = trip.name,
+                    text = trip.tripName,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(vertical = 8.dp)
                 )
 
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                    Text(text = trip.date, fontWeight = FontWeight.Medium)
+                    Text(text = trip.startDate, fontWeight = FontWeight.Medium)
                     Text(text = trip.duration)
                 }
 
@@ -91,6 +92,16 @@ fun TripListItem(trip: Trip) {
 @Composable
 fun TripItemPreview() {
     VoyaTripTheme {
-        TripListItem(Trip("Summer Get Away", "Bahamas", "16 July", "3 days"))
+        TripListItem(
+            Trip(
+                "Summer Get Away",
+                "Bahamas",
+                "16 July",
+                dummyLocations(2)[0],
+                "",
+                "",
+                ""
+            )
+        )
     }
 }

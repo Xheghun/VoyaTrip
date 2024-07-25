@@ -1,13 +1,15 @@
 package com.xheghun.voyatrip.di
 
+import com.google.gson.GsonBuilder
 import com.xheghun.voyatrip.data.api.TripsService
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
+import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-private const val BASE_URL = "https://ca8ee93aaebdc62eb95a.free.beeceptor.com"
+private const val BASE_URL = "https://voyaapp.free.beeceptor.com"
 
 fun networkingModule() = module {
     single {
@@ -18,7 +20,11 @@ fun networkingModule() = module {
             .build()
     } // client
 
-    single { GsonConverterFactory.create() } // gson converter
+
+    single { GsonBuilder().create() }
+
+
+    single { GsonConverterFactory.create(get()) } // gson converter
 
     single {
         Retrofit.Builder()

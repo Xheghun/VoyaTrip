@@ -8,5 +8,4 @@ import org.koin.dsl.module
 
 fun appModule() = module {
     single { TripsRepoImpl(get()) as TripsRepo } // repository
-    single { TripViewModel(get()) as TripsPresenter }
 }

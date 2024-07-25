@@ -254,7 +254,13 @@ fun CreateTripBottomSheet(tripViewModel: TripViewModel) {
                             Box(Modifier.weight(1f))
 
                             Button(
-                                onClick = { },
+                                onClick = {
+                                    coroutineScope.launch {
+                                        bottomSheetState.hide()
+                                        tripViewModel.updateIsCreateTripExpanded(false)
+                                        tripViewModel.createTrip()
+                                    }
+                                },
                                 shape = RoundedCornerShape(4.dp),
                                 colors = ButtonDefaults.buttonColors(
                                     containerColor = bluePrimary,
