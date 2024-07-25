@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -32,6 +31,7 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,6 +49,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.xheghun.voyatrip.R
 import com.xheghun.voyatrip.data.models.dummyLocations
 import com.xheghun.voyatrip.data.models.dummyTrips
@@ -67,12 +68,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TripsView() {
-    val options = listOf("Planned Trips", "Completed Trips")
-
-    var isOptionsExpanded by remember { mutableStateOf(false) }
-    var selectedOptions by remember { mutableStateOf(options[0]) }
-
-    var isSelectCityExpanded by remember { mutableStateOf(false) }
+    val tripViewModel = viewModel<TripViewModel>()
 
     Column() {
         VoyaAppBar(title = "Plan a Trip")
@@ -150,7 +146,7 @@ fun TripsView() {
                         subTitle = "Select City",
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        isSelectCityExpanded = true
+                        tripViewModel.toggleIsSelectCityExpanded(true)
                     }
                     Spacer(height = 6f)
 
@@ -220,8 +216,8 @@ fun TripsView() {
                 ExposedDropdownMenuBox(modifier = Modifier
                     .clip(RoundedCornerShape(4.dp))
                     .background(Color.White),
-                    expanded = isOptionsExpanded,
-                    onExpandedChange = { isOptionsExpanded = !isOptionsExpanded }) {
+                    expanded = tripViewModel.isOptionsExpanded.collectAsState().value,
+                    onExpandedChange = { tripViewModel.toggleOptions() }) {
                     OutlinedTextField(
                         colors = OutlinedTextFieldDefaults.colors(
                             focusedContainerColor = Color.White,
@@ -234,20 +230,24 @@ fun TripsView() {
                         modifier = Modifier
                             .menuAnchor()
                             .fillMaxWidth(),
-                        value = selectedOptions,
+                        value = tripViewModel.selectedOption.collectAsState().value,
                         onValueChange = {},
                         readOnly = true,
-                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = isOptionsExpanded) })
+                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = tripViewModel.isOptionsExpanded.collectAsState().value) })
 
                     ExposedDropdownMenu(
                         modifier = Modifier
                             .background(Color.White),
-                        expanded = isOptionsExpanded,
-                        onDismissRequest = { isOptionsExpanded = false }) {
-                        options.forEach { option ->
+                        expanded = tripViewModel.isOptionsExpanded.collectAsState().value,
+                        onDismissRequest = { tripViewModel.toggleOptions(false) }) {
+                        tripViewModel.options.collectAsState().value.forEach { option ->
                             DropdownMenuItem(
                                 text = { Text(text = option) },
-                                onClick = { selectedOptions = option; isOptionsExpanded = false },
+                                onClick = {
+                                    tripViewModel.updateSelectedOption(option); tripViewModel.toggleOptions(
+                                    false
+                                )
+                                },
                                 contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
                             )
                         }
@@ -266,18 +266,18 @@ fun TripsView() {
         }
 
 
-        SelectCityBottomSheet(isSelectCityExpanded) { isSelectCityExpanded = false }
+        SelectCityBottomSheet(tripViewModel)
     }
 }
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SelectCityBottomSheet(isExpanded: Boolean, onDismissRequest: () -> Unit) {
+fun SelectCityBottomSheet(tripViewModel: TripViewModel) {
     val bottomSheetState = rememberModalBottomSheetState()
     val coroutineScope = rememberCoroutineScope()
 
-    if (isExpanded) {
+    if (tripViewModel.isSelectCityExpanded.collectAsState().value) {
         ModalBottomSheet(
             shape = RoundedCornerShape(0.dp),
             sheetState = bottomSheetState,
@@ -290,7 +290,7 @@ fun SelectCityBottomSheet(isExpanded: Boolean, onDismissRequest: () -> Unit) {
                     VoyaAppBar(title = "Where", Icons.Default.Close) {
                         coroutineScope.launch {
                             bottomSheetState.hide()
-                            onDismissRequest.invoke()
+                            tripViewModel.toggleIsSelectCityExpanded(false)
                         }
                     }
                     Column(Modifier.padding(12.dp)) {
@@ -313,7 +313,9 @@ fun SelectCityBottomSheet(isExpanded: Boolean, onDismissRequest: () -> Unit) {
                     }
                 }
             },
-            onDismissRequest = { onDismissRequest.invoke() },
+            onDismissRequest = {
+                tripViewModel.toggleIsSelectCityExpanded(false)
+            },
             dragHandle = {}
         )
     }
