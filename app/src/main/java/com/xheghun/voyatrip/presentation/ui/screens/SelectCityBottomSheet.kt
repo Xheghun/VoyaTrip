@@ -31,7 +31,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SelectCityBottomSheet(tripViewModel: TripViewModel) {
-    val bottomSheetState = rememberModalBottomSheetState()
+    val bottomSheetState = rememberModalBottomSheetState(true)
     val coroutineScope = rememberCoroutineScope()
 
     if (tripViewModel.isSelectCityExpanded.collectAsState().value) {

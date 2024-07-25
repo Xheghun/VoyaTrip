@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -13,7 +12,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material3.Button
@@ -22,14 +20,11 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,10 +38,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.xheghun.voyatrip.R
-import com.xheghun.voyatrip.data.models.dummyLocations
 import com.xheghun.voyatrip.data.models.dummyTrips
 import com.xheghun.voyatrip.presentation.ui.custom_view.Item
-import com.xheghun.voyatrip.presentation.ui.custom_view.LocationListItem
 import com.xheghun.voyatrip.presentation.ui.custom_view.TripListItem
 import com.xheghun.voyatrip.presentation.ui.custom_view.VoyaAppBar
 import com.xheghun.voyatrip.presentation.ui.theme.Satoshi
@@ -55,7 +48,6 @@ import com.xheghun.voyatrip.ui.theme.bluePrimary
 import com.xheghun.voyatrip.ui.theme.darkGray
 import com.xheghun.voyatrip.ui.theme.lightGray
 import com.xheghun.voyatrip.ui.theme.skyBlue
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -167,7 +159,7 @@ fun TripsView() {
                     }
 
                     Button(
-                        onClick = { },
+                        onClick = { tripViewModel.updateIsCreateTripExpanded(true) },
                         shape = RoundedCornerShape(4.dp),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = bluePrimary,
@@ -203,7 +195,7 @@ fun TripsView() {
                 color = darkGray
             )
 
-            Box(modifier = Modifier.height(10.dp))
+            Spacer(10f)
 
             Box(
                 modifier = Modifier
@@ -266,5 +258,6 @@ fun TripsView() {
 
         SelectCityBottomSheet(tripViewModel)
         ChooseDateBottomSheet(tripViewModel)
+        CreateTripBottomSheet(tripViewModel)
     }
 }

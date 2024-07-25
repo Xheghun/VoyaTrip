@@ -54,7 +54,7 @@ import java.time.YearMonth
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChooseDateBottomSheet(tripViewModel: TripViewModel) {
-    val bottomSheetState = rememberModalBottomSheetState()
+    val bottomSheetState = rememberModalBottomSheetState(true)
     val coroutineScope = rememberCoroutineScope()
 
     if (tripViewModel.isChooseDateExpanded.collectAsState().value) {
@@ -90,7 +90,6 @@ fun ChooseDateBottomSheet(tripViewModel: TripViewModel) {
                             firstDayOfWeek = firstDayOfWeek
                         )
 
-
                         VerticalCalendar(
                             state = state,
                             dayContent = {
@@ -103,9 +102,8 @@ fun ChooseDateBottomSheet(tripViewModel: TripViewModel) {
                             },
                             monthHeader = {
                                 MonthHeader(it)
-                            },
-
-                            )
+                            }
+                        )
                     }
                     Spacer(height = 6f)
                     Column(Modifier.padding(12.dp)) {
