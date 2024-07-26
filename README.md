@@ -1,6 +1,12 @@
 # VoyaTravel
 
-### Api
+### User Interface
+This app implements a smooth seamless user experience
+
+#### Screenshots
+
+
+### API
 The Api Integrated with this app linked with a mock server having 2 endpoints
 
 ```kotlin
