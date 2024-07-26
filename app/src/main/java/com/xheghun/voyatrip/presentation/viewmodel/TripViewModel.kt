@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
-
 enum class DatePickerState {
     START_DATE, END_DATE
 }
@@ -20,7 +19,7 @@ enum class DatePickerState {
 class TripViewModel(private val tripsRepo: TripsRepo) : TripsPresenter, ViewModel() {
 
     init {
-        //getTrips()
+       // getTrips()
     }
 
     private val _options = MutableStateFlow(listOf("Planned Trips", "Completed Trips"))

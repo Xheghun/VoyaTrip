@@ -20,9 +20,7 @@ fun networkingModule() = module {
             .build()
     } // client
 
-
     single { GsonBuilder().create() }
-
 
     single { GsonConverterFactory.create(get()) } // gson converter
 

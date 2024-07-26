@@ -136,6 +136,8 @@ fun CreateTripBottomSheet(tripViewModel: TripViewModel) {
                                 modifier = Modifier.padding(vertical = 4.dp)
                             )
                             OutlinedTextField(
+                                maxLines = 1,
+                                singleLine = true,
                                 modifier = Modifier.fillMaxWidth(),
                                 value = tripViewModel.tripName.collectAsState().value,
                                 onValueChange = {
