@@ -5,13 +5,17 @@ This app implements a smooth seamless user experience
 
 #### Screenshots
 
-<image src="https://github.com/user-attachments/assets/772f482e-be6b-4625-a49e-da7e98c7689d" height="100" width="100" >
+<image src="https://github.com/user-attachments/assets/772f482e-be6b-4625-a49e-da7e98c7689d" height="400" width="250"/>
 
-![Screenshot_2024-07-26-10-32-36](https://github.com/user-attachments/assets/a02d4106-fd56-4d7a-a923-f09511f52099)
-![Screenshot_2024-07-26-10-36-08](https://github.com/user-attachments/assets/fcd4df27-fa79-4cf9-8da2-06c1d4bf06c2)
-![Screenshot_2024-07-26-10-35-05](https://github.com/user-attachments/assets/37e978e5-3436-4ce3-8455-bc1f65ee2714)
-![Screenshot_2024-07-26-10-36-28](https://github.com/user-attachments/assets/286e094c-d2d0-4808-82f4-f71ae5b61767)
-![Screenshot_2024-07-26-10-35-25](https://github.com/user-attachments/assets/587b7998-4d47-4198-bd11-30edad3a336d)
+<image src="https://github.com/user-attachments/assets/a02d4106-fd56-4d7a-a923-f09511f52099" height="400" width="250"/>
+
+<image src="https://github.com/user-attachments/assets/fcd4df27-fa79-4cf9-8da2-06c1d4bf06c2" height="400" width="250"/>
+
+<image src="https://github.com/user-attachments/assets/37e978e5-3436-4ce3-8455-bc1f65ee2714" height="400" width="250"/>
+
+<image src="https://github.com/user-attachments/assets/286e094c-d2d0-4808-82f4-f71ae5b61767" height="400" width="250"/>
+
+<image src="https://github.com/user-attachments/assets/587b7998-4d47-4198-bd11-30edad3a336d" height="400" width="250"/>
 
 
 
