@@ -20,7 +20,7 @@ enum class DatePickerState {
 class TripViewModel(private val tripsRepo: TripsRepo) : TripsPresenter, ViewModel() {
 
     init {
-        getTrips()
+        //getTrips()
     }
 
     private val _options = MutableStateFlow(listOf("Planned Trips", "Completed Trips"))
@@ -29,7 +29,19 @@ class TripViewModel(private val tripsRepo: TripsRepo) : TripsPresenter, ViewMode
     private val _travelStyleOptions = MutableStateFlow(listOf("Solo", "Couple", "Family", "Group"))
     val travelStyleOptions = _travelStyleOptions.asStateFlow()
 
-    private val _trips = MutableStateFlow<List<Trip>>(listOf())
+    private val _trips = MutableStateFlow<List<Trip>>(
+        listOf(
+            Trip(
+                "Bahamas Holiday",
+                "Solo",
+                "Trip to the Bahamas by myself",
+                Location("image", "NG", "Ikeja", "Lagos, Nigeria"),
+                "2024-07-30",
+                "2024-08-10",
+                "10 Days"
+            )
+        )
+    )
     val trips = _trips.asStateFlow()
 
     private val _isOptionsExpanded = MutableStateFlow(false)
@@ -75,6 +87,13 @@ class TripViewModel(private val tripsRepo: TripsRepo) : TripsPresenter, ViewMode
 
     private val _isBusy = MutableStateFlow(false)
     val isBusy = _isBusy.asStateFlow()
+
+    private val _selectedTrip = MutableStateFlow<Trip?>(null)
+    val selectedTrip = _selectedTrip.asStateFlow()
+
+    fun updateSelectedTrip(trip: Trip) {
+        _selectedTrip.value = trip
+    }
 
     fun updateTripName(value: String) {
         _tripName.value = value
@@ -137,7 +156,7 @@ class TripViewModel(private val tripsRepo: TripsRepo) : TripsPresenter, ViewMode
         }
     }
 
-    override fun createTrip() {
+    override fun createTrip(onSuccess: () -> Unit, onError: () -> Unit) {
         _isBusy.value = true
         val trip = Trip(
             tripName = tripName.value,
@@ -155,10 +174,12 @@ class TripViewModel(private val tripsRepo: TripsRepo) : TripsPresenter, ViewMode
                 .onSuccess {
                     _isBusy.value = false
                     Log.d("TripViewModel", "Trip created successfully")
+                    onSuccess.invoke()
                 }
                 .onFailure {
                     _isBusy.value = false
                     Log.e("TripViewModel", "Error creating trip", it)
+                    onError.invoke()
                 }
         }
     }
@@ -172,5 +193,23 @@ class TripViewModel(private val tripsRepo: TripsRepo) : TripsPresenter, ViewMode
                 Log.e("TripViewModel", "Error getting trips", it)
             }
         }
+    }
+
+    override fun canDisplayCreateTripForm(): Boolean {
+        //TODO("There's a better way to handle this validation")
+        return (_selectedCity.value != null &&
+                (_selectedStartDate.value != "Enter Date" && _selectedStartDate.value.isNotEmpty())
+                && (_selectedEndDate.value != "Enter Date" && _selectedEndDate.value.isNotEmpty())
+                )
+    }
+
+    override fun isTripValid(): Boolean {
+        //TODO("There's a better way to handle this validation")
+        return (
+                tripName.value.isNotEmpty() &&
+                        tripDescription.value.isNotEmpty() &&
+                        (selectedTravelStyle.value != defaulTravel && selectedTravelStyle.value.isNotEmpty())
+                        && selectedCity.value != null
+                        && canDisplayCreateTripForm())
     }
 }

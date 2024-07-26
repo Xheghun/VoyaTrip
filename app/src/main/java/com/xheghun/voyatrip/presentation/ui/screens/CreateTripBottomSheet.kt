@@ -1,5 +1,6 @@
 package com.xheghun.voyatrip.presentation.ui.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -33,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -253,12 +255,31 @@ fun CreateTripBottomSheet(tripViewModel: TripViewModel) {
 
                             Box(Modifier.weight(1f))
 
+                            val toast = Toast.makeText(
+                                LocalContext.current,
+                                "Please input all fields",
+                                Toast.LENGTH_SHORT
+                            )
+
                             Button(
+                                enabled = tripViewModel.isTripValid(),
                                 onClick = {
-                                    coroutineScope.launch {
-                                        bottomSheetState.hide()
-                                        tripViewModel.updateIsCreateTripExpanded(false)
-                                        tripViewModel.createTrip()
+                                    if (tripViewModel.isTripValid()) {
+                                        coroutineScope.launch {
+                                            bottomSheetState.hide()
+                                            tripViewModel.updateIsCreateTripExpanded(false)
+                                            tripViewModel.createTrip(
+                                                {
+                                                    toast.setText("Trip created successfully")
+                                                    toast.show()
+                                                },
+                                                {
+                                                    toast.setText("Trip creation failed: Contact admin")
+                                                    toast.show()
+                                                })
+                                        }
+                                    } else {
+                                        toast.show()
                                     }
                                 },
                                 shape = RoundedCornerShape(4.dp),

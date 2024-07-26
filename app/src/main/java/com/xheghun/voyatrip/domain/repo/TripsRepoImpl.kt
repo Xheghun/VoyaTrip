@@ -7,6 +7,7 @@ import com.xheghun.voyatrip.data.models.Trip
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
+import retrofit2.HttpException
 import kotlin.coroutines.CoroutineContext
 
 class TripsRepoImpl(
@@ -24,7 +25,7 @@ class TripsRepoImpl(
         if (response.isSuccessful) {
             Log.d("TripsRepoImpl", "Trip created successfully")
         } else {
-            Log.e("TripsRepoImpl", "Failed to create trip ${response.raw()}")
+            throw HttpException(response)
         }
 
     }

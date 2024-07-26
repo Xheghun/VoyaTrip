@@ -6,5 +6,4 @@ import org.koin.dsl.module
 
 fun viewModelModule() = module {
     viewModel { TripViewModel(get()) }
-
 }

@@ -44,6 +44,7 @@ import com.kizitonwose.calendar.core.daysOfWeek
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.xheghun.voyatrip.presentation.ui.custom_view.VoyaAppBar
 import com.xheghun.voyatrip.presentation.ui.utils.Spacer
+import com.xheghun.voyatrip.presentation.ui.utils.parseDate
 import com.xheghun.voyatrip.presentation.viewmodel.DatePickerState
 import com.xheghun.voyatrip.presentation.viewmodel.TripViewModel
 import com.xheghun.voyatrip.ui.theme.bluePrimary
@@ -113,7 +114,7 @@ fun ChooseDateBottomSheet(tripViewModel: TripViewModel) {
                         Row {
                             DateItem(
                                 title = "Start Date",
-                                value = tripViewModel.selectedStartDate.collectAsState().value,
+                                value = parseDate(tripViewModel.selectedStartDate.collectAsState().value),
                                 modifier = Modifier.weight(1f),
                                 borderColor = if (tripViewModel.datePickerState.collectAsState().value == DatePickerState.START_DATE) bluePrimary else lightGray
                             ) {
@@ -124,7 +125,7 @@ fun ChooseDateBottomSheet(tripViewModel: TripViewModel) {
 
                             DateItem(
                                 title = "End Date",
-                                value = tripViewModel.selectedEndDate.collectAsState().value,
+                                value = parseDate(tripViewModel.selectedEndDate.collectAsState().value),
                                 modifier = Modifier.weight(1f),
                                 borderColor = if (tripViewModel.datePickerState.collectAsState().value == DatePickerState.END_DATE) bluePrimary else lightGray
                             ) {
