@@ -9,7 +9,7 @@ import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-private const val BASE_URL = "https://voyaapp.free.beeceptor.com"
+private const val BASE_URL = "https://voyatravel.free.beeceptor.com"
 
 fun networkingModule() = module {
     single {
